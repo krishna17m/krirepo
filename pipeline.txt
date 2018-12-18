@@ -1,0 +1,20 @@
+node {
+    stage ('checkout scm'){
+        git 'https://github.com/javahometech/my-app'
+        
+    }
+    
+    stage ('compile and build'){
+	
+	####before pipeline syntax generation 
+	simple step --- tool: use
+		Type:- maven
+		Tool:- maven3
+		Generate script
+		
+    #####==============================================
+	
+        def mvnHome = tool name: 'maven3', type: 'maven'
+        sh "${mvnHome}/bin/mvn package"
+    }
+}
