@@ -1,0 +1,56 @@
+
+How to do Ansible setup?
+
+1)Spin Ubuntu m/c which we will make ansible CM
+2)sudo apt-get update
+3)sudo apt-get install ansible -y
+4)check ansible and python version 
+ansible --version and python --version
+5)now spin another linux ec - vm
+6)go to Vim /etc/ansible/hosts and the pvt ip of vm in CM-Ubuntu
+
+172.31.85.168 ansible_user=ec2-user ansible_ssh_private_key_file=~/aws.pem
+
+7) sudo vim /etc/ansible/ansible.cfg
+ to disable the  prompt for yes while we write script
+host_key_checking=false
+
+8)sudo vim aws.pem  and copy the complete vm1.key into it  place in /home/ubuntu
+
+===========================================================
+9)create passwd less comm between ubuntu and ec2 linux
+ubuntu@ip-172-31-85-241:/etc/ansible$ ssh-keygen
+Generating public/private rsa key pair.
+Enter file in which to save the key (/home/ubuntu/.ssh/id_rsa):
+
+now do cat 
+ubuntu@ip-172-31-85-241:~/.ssh$ pwd
+/home/ubuntu/.ssh
+ubuntu@ip-172-31-85-241:~/.ssh$ cat id_rsa.pub
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDtH8p5C0Qp0ALlNpC0QNK1mDep2Q7Pgvgf37CxWvMYYm5XgXP94gQwdtlRAEtGYZDtkzSu8FvnHonDkrcTwEUSfISpy8x7R3Ng0KjFFD6K0gC/bR8l/8JOlQup8w3zrjPth3GFidaCvLVryAWxqIcQnNYKl6G1vtdz2N550IYn+BVaplMBM+Ywo5qkpkMYNXFjAQnbRhao5hvE0hDNEV7LDDQG2XGy6LeE0YWAHSRKe6eTtxKPlqKvRUHssBlzj9999YBiyUj8BjI8ZOmQel1wbSOm+HkyDQy6NoWUM1EfH1Yt3y1q3wMknyQhCM6GAnvdlKYVWUTS/R8GMJ0JStaR ubuntu@ip-172-31-85-241
+ubuntu@ip-172-31-85-241:~/.ssh$
+
+go to ec2-instance and append the pub in below location 
+
+[ec2-user@ip-172-31-85-168 .ssh]$ pwd
+/home/ec2-user/.ssh
+[ec2-user@ip-172-31-85-168 .ssh]$ cat authorized_keys
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCdwSrmO+eiklXV8OM2ZrCX8rueKIWhOE86cXGhUewJge8Ss0G4M1yHszo6jDdjCEHHNoVnZRSgrnuwwDZ5ur0gPzFUcDZdiDp8SG81au/f/Rw/TD7J3RmbYSJnyrNIHI1Ivp5E7bSJNrQjCddbAI8z9JFxI6BVTbNxL6Kf+ahRJkKGJj25nTSIjqmYjW5Jgq+zhTolepQsisRkNUtKljSBvSCgrLJ4WT8IXxbLa0hgQ2kBue2fP29Urgmm7PtwoIEUoHWrRbqM8ua3xX9eONEEeisCRc99puCTnDGvTVOuWLBc4YcqeL5zFMAxYVmkJQ/YKxfQDrrKD+leFZkdMmaF vm1key
+ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDtH8p5C0Qp0ALlNpC0QNK1mDep2Q7Pgvgf37CxWvMYYm5XgXP94gQwdtlRAEtGYZDtkzSu8FvnHonDkrcTwEUSfISpy8x7R3Ng0KjFFD6K0gC/bR8l/8JOlQup8w3zrjPth3GFidaCvLVryAWxqIcQnNYKl6G1vtdz2N550IYn+BVaplMBM+Ywo5qkpkMYNXFjAQnbRhao5hvE0hDNEV7LDDQG2XGy6LeE0YWAHSRKe6eTtxKPlqKvRUHssBlzj9999YBiyUj8BjI8ZOmQel1wbSOm+HkyDQy6NoWUM1EfH1Yt3y1q3wMknyQhCM6GAnvdlKYVWUTS/R8GMJ0JStaR ubuntu@ip-172-31-85-241
+
+[ec2-user@ip-172-31-85-168 .ssh]$
+==================================
+Now it will ping 
+ubuntu@ip-172-31-85-241:~/.ssh$ ansible -m ping all
+172.31.85.168 | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+ubuntu@ip-172-31-85-241:~/.ssh$
+
+
+
+
+
+
+
